@@ -49,15 +49,14 @@ VERSION 2 0 2
 
 ### LED Control
 These Commands Control the WS2812 LED Ring of the reSpeaker XVF3800.
-| Command name   | Read/Write | Params | Param format | Description                                                                                            |   |   |   |   |   |
-|----------------|------------|--------|--------------|--------------------------------------------------------------------------------------------------------|---|---|---|---|---|
-| LED_EFFECT     | RW         | 1      | uint8_t      | Set the LED effect mode, 0 = off, 1 = breath, 2 = rainbow, 3 = single color, 4 = doa                   |   |   |   |   |   |
-| LED_BRIGHTNESS | RW         | 1      | uint8_t      | Set the brightness value of the LED for the breath and rainbow mode                                    |   |   |   |   |   |
-| LED_GAMMIFY    | RW         | 1      | uint8_t      | Set to enable gamma correction, 0 = disable, 1 = enable                                                |   |   |   |   |   |
-| LED_SPEED      | RW         | 1      | uint8_t      | Set the effect speed of breath and rainbow mode                                                        |   |   |   |   |   |
-| LED_COLOR      | RW         | 1      | uint32_t     | Set the LED color of breath mode and single color mode                                                 |   |   |   |   |   |
-| LED_DOA_COLOR  | RW         | 2      | uint32_t     | Set the LED color of doa mode, the first value is the base color and the second value is the doa color |   |   |   |   |   |
-|                |            |        |              |                                                                                                        |   |   |   |   |   |
+| Command name   | Read/Write | Params | Param format | Description                                                                                            |
+|----------------|------------|--------|--------------|--------------------------------------------------------------------------------------------------------|
+| LED_EFFECT     | RW         | 1      | uint8_t      | Set the LED effect mode, 0 = off, 1 = breath, 2 = rainbow, 3 = single color, 4 = doa                   |
+| LED_BRIGHTNESS | RW         | 1      | uint8_t      | Set the brightness value of the LED for the breath and rainbow mode                                    |
+| LED_GAMMIFY    | RW         | 1      | uint8_t      | Set to enable gamma correction, 0 = disable, 1 = enable                                                |
+| LED_SPEED      | RW         | 1      | uint8_t      | Set the effect speed of breath and rainbow mode                                                        |
+| LED_COLOR      | RW         | 1      | uint32_t     | Set the LED color of breath mode and single color mode                                                 |
+| LED_DOA_COLOR  | RW         | 2      | uint32_t     | Set the LED color of doa mode, the first value is the base color and the second value is the doa color |
 
 By default, reSpeaker XVF3800 runs `rainbow` mode when boot, and then switch to `doa` mode after 2seconds. Here is an example to set a `breath` mode:
 ```
@@ -71,11 +70,10 @@ By default, reSpeaker XVF3800 runs `rainbow` mode when boot, and then switch to 
 
 These commands are for saving/clearing all the writable parameters on the reSpeaker XVF3800.
 
-| Command name        | Read/Write | Params | Param format | Description                                                                                  |   |   |   |   |   |
-|---------------------|------------|--------|--------------|----------------------------------------------------------------------------------------------|---|---|---|---|---|
-| SAVE_CONFIGURATION  | RW         | 1      | uint8_t      | Set to any value to save the current configuration to flash.                                 |   |   |   |   |   |
-| CLEAR_CONFIGURATION | RW         | 1      | uint8_t      | Set to any value to clear the current configuration and revert to the default configuration. |   |   |   |   |   |
-|                     |            |        |              |                                                                                              |   |   |   |   |   |
+| Command name        | Read/Write | Params | Param format | Description                                                                                  |
+|---------------------|------------|--------|--------------|----------------------------------------------------------------------------------------------|
+| SAVE_CONFIGURATION  | RW         | 1      | uint8_t      | Set to any value to save the current configuration to flash.                                 |
+| CLEAR_CONFIGURATION | RW         | 1      | uint8_t      | Set to any value to clear the current configuration and revert to the default configuration. |
 
 Here are the examples to save/clear configuration:
 ```
