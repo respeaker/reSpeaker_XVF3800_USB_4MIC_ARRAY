@@ -15,7 +15,7 @@ The sample host application `xvf_host` can be found in the `host_control/<platfo
 ├── transport_config.yaml           # RPi only
 ├── (lib)device_usb.(so/dll/dylib)  # All platforms
 ├── libusb-1.0.0.dylib              # mac_x86_64 and mac_arm64 only
-├── xvf_dfu                         # RPi only
+├── xvf_i2c_dfu                     # RPi only
 └── xvf_host(.exe)                  # All platforms
 ```
 
