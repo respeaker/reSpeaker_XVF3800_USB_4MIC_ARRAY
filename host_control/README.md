@@ -49,6 +49,7 @@ VERSION 2 0 2
 
 ### LED Control
 These Commands Control the WS2812 LED Ring of the reSpeaker XVF3800.
+
 | Command name   | Read/Write | Params | Param format | Description                                                                                            |
 |----------------|------------|--------|--------------|--------------------------------------------------------------------------------------------------------|
 | LED_EFFECT     | RW         | 1      | uint8_t      | Set the LED effect mode, 0 = off, 1 = breath, 2 = rainbow, 3 = single color, 4 = doa                   |
@@ -82,4 +83,57 @@ Here are the examples to save/clear configuration:
 // To clear configuration, send the following command, and reboot the reSpeaker XVF3800
 ./xvf_host clear_configuration 1
 ```
+
+### GPIO Control
+
+There are 3 input pins and 5 output pins that can be controlled on the reSpeaker XVF3800. Some of them can be used to control the LEDs, amplifier, microphones and the rest of them are floating. You can connect them to your own circuit if you want.
+
+| Pin Name | Description                                                                                                                         | Direction | Read/Write  |
+|----------|-------------------------------------------------------------------------------------------------------------------------------------|-----------|-------------|
+| X1D09    | The state pin connected to the mute button, which is high level when the mute button is released                                    | Input     | Read Only   |
+| X1D13    | Floating pin                                                                                                                        | Input     | Read Only   |
+| X1D34    | Floating pin                                                                                                                        | Input     | Read Only   |
+| X0D11    | Floating pin                                                                                                                        | Output    | RW          |
+| X0D30    | The control pin of the microphone's mute circuit and the red mute LED, set this high to mute microphones and light the red mute led | Output    | RW          |
+| X0D31    | The enable pin of the audio amplifier, enabled by low level                                                                         | Output    | RW          |
+| X0D33    | The power control pin of WS2812 LEDs, enabled by high level                                                                         | Output    | RW          |
+| X0D39    | Floating pin                                                                                                                        | Output    | RW          |
+
+These commands are used to control the GPIO pins of the reSpeaker XVF3800.
+
+| Command name    | Read/Write | Params | Param format | Description                                                                                     |
+|-----------------|------------|--------|--------------|-------------------------------------------------------------------------------------------------|
+| GPI_READ_VALUES | Read Only  | 3      | uint8_t      | Get current logic level of all GPI pins, in order of Pin X1D09, X1D13 and X1D34.                |
+| GPO_READ_VALUES | Read Only  | 5      | uint8_t      | Get current logic level of all GPO pins, in order of Pin X0D11, X0D30, X0D31, X0D33 and X0D39.  |
+| GPO_WRITE_VALUE | Write Only | 2      | uint8_t      | Set current logic level of selected GPO pin. Supports Pin X0D11, X0D30, X0D31, X0D33 and X0D39. |
+
+Here are some examples of using GPIO control commands:
+
+1. **Read GPI values**
+```bash
+./xvf_host GPI_READ_VALUES 
+Device (USB)::device_init() -- Found device VID: 10374 PID: 26 interface: 3
+GPI_READ_VALUES 1 0 0
+```
+In this example, the return `1 0 0` means that Pin X1D09 is high level, Pin X1D13 is low level and Pin X1D34 is low level.
+
+2. **Read GPO values**
+```bash
+./xvf_host GPO_READ_VALUES 
+Device (USB)::device_init() -- Found device VID: 10374 PID: 26 interface: 3
+GPO_READ_VALUES 0 0 0 1 0
+```
+In this example, the return `0 0 0 1 0` means that Pin X0D11 is low level, Pin X0D30 is low level, Pin X0D31 is high level, Pin X0D33 is high level and Pin X0D39 is low level.
+
+3. **Set GPO pin X0D30 to high level**
+```bash
+./xvf_host GPO_WRITE_VALUE 30 1
+```
+After setting, read GPO values again, you will find that Pin X0D30 is high level and the mute led on reSpeaker XVF3800 is also on.
+
+4. **Set GPO pin X0D33 to low level**
+```bash
+./xvf_host GPO_WRITE_VALUE 33 0
+```
+After setting, read GPO values again, you will find that Pin X0D33 is low level and the WS2812 LEDs on reSpeaker XVF3800 is also off.
 
