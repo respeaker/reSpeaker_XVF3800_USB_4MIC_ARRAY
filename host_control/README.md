@@ -137,3 +137,84 @@ After setting, read GPO values again, you will find that Pin X0D30 is high level
 ```
 After setting, read GPO values again, you will find that Pin X0D33 is low level and the WS2812 LEDs on reSpeaker XVF3800 is also off.
 
+
+### Direction of Arrival(DoA) Indication
+
+By default, the reSpeaker XVF3800's LED ring provides DoA indication, showing the current direction focused by the microphone array. It is possible to read back the direction that the beams are currently pointing using the `AEC_AZIMUTH_VALUES` command:
+
+```bash
+./xvf_host AEC_AZIMUTH_VALUES
+Device (USB)::device_init() -- Found device VID: 10374 PID: 26 interface: 3
+AEC_AZIMUTH_VALUES 0.91378 (52.36 deg) 0.00000 (0.00 deg) 1.57080 (90.00 deg) 0.91378 (52.36 deg) 
+```
+
+The command outputs four values:
+1. Focused beam 1
+2. Focused beam 2
+3. Free running beam
+4. Auto selected beam
+
+Each value represents the azimuth angle of the corresponding beam, provided in both radians and degrees. The DoA indication uses the last value (Auto selected beam).
+
+Refer to the diagram below for the actual position corresponding to DoA angles:
+![Direction of Arrival Diagram](../doc/doa.jpg)
+
+#### In-depth Understanding of Multi-beamforming
+
+As described in the XVF3800 datasheet, the system uses an array of beams to focus on speakers, reducing unwanted sounds and reverberation in the output signal. The XVF3800 employs a free-running beam that scans the environment, identifies potential speakers, and switches one of the two focused beams to that direction. During normal operation, the audio processing pipeline automatically selects the best signal for output (Auto selected beam).
+
+For detailed technical information, refer to:
+- [beamforming-subsystem](https://www.xmos.com/documentation/XM-014888-PC/html/modules/fwk_xvf/doc/user_guide/03_using_the_host_application.html#beam-forming-subsystem-and-direction-of-arrival-indicator)
+- [beamformer](https://www.xmos.com/documentation/XM-014888-PC/html/modules/fwk_xvf/doc/datasheet/03_audio_pipeline.html#beamformer)
+
+#### Speech Indication
+
+Speech Energy is a value that indicates whether speech is present in the beam as well as the amplitude, which is similar to VAD(Voice Activity Detection). Non-zero spenergy means that the beam probably contains speech. Higher values indicate louder or closer speech, however noise, echo and reverb can cause the energy level to decrease. During post-processing, the Speech Energy is also calculated for each of the 4 beams. To check them, use the `AEC_SPENERGY_VALUES` command:
+
+```bash
+./xvf_host AEC_SPENERGY_VALUES
+Device (USB)::device_init() -- Found device VID: 10374 PID: 26 interface: 3
+AEC_SPENERGY_VALUES 2080656 0 2083455 2080656
+```
+
+The command outputs four Speech Energy value for these beams in order:
+1. Focused beam 1
+2. Focused beam 2
+3. Free running beam
+4. Auto selected beam
+
+### Output Selection
+
+By default, the left channel of the reSpeaker XVF3800 output is the processed output from the XVF3800’s AEC, beamforming and post process stage, while the right channel is the ASR ouput of the auto selectd beam. The users can choose one of them for different usgae, such as conference or speech recognition. 
+The selected outputs may be changed by using the AUDIO_MGR_OP_L and AUDIO_MGR_OP_R commands. These commands each take two integers defining the mux routing settings, described as a pair of (category, source) values.
+
+The available categories and sources are shown in detail as follows:
+
+| Category                                            | Sources                                                                                                                                                                                                                                                                                                                                                                       |
+|-----------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 0: Silence                                          | 0: Silence. This is the default setting for the right channel output.                                                                                                                                                                                                                                                                                                         |
+| 1: Raw microphone data - before amplification       | 0,1,2,3: Specific microphones accessed by index, no system delay applied.                                                                                                                                                                                                                                                                                                     |
+| 2: Unpacked microphone data                         | 0,1,2,3: Unpacked microphone signals. If using packed input, access packed microphone data though this category. This data is undefined when not using packed input.                                                                                                                                                                                                          |
+| 3: Amplified microphone data with system delay      | 0,1,2,3: Specific microphones accessed by index. This category provides the microphone signal passed to the SHF logical cores for processing.                                                                                                                                                                                                                                 |
+| 4: Far end (reference) data                         | 0: Far end data received over I2S, post sample rate conversion to 16 kHz if required.                                                                                                                                                                                                                                                                                         |
+| 5: Far end (reference) data with system delay       | 0: Far end data received over I2S, post sample rate conversion to 16 kHz if required, and with system delay applied.                                                                                                                                                                                                                                                          |
+| 6: Processed data                                   | 0,1: Slow-moving post-processed beamformed outputs, 2: Fast-moving post-processed beamformed output, 3: The “auto-select” beam; chooses the best of the previous three beams as an output, recommended option for selecting the beamformed outputs                                                                                                                            |
+| 7: AEC residual / ASR data                          | 0,1,2,3: AEC residuals for the specified microphone, or ASR ouput for the specified beam.                                                                                                                                                                                                                                                                                     |
+| 8: User chosen channels                             | 0,1: These currently copy the auto-select beam (category 6, source 3) and are the default setting for the left channel output.                                                                                                                                                                                                                                                |
+| 9: Post SHF DSP channels                            | 0,1,2,3: All output channels from user post SHF DSP.                                                                                                                                                                                                                                                                                                                          |
+| 10: Far end at native rate                          | 0,1,2,3,4,5: Data passed from I2S logical core to Audio Manager logical core. All sources carry useful data if the external interface rate is 48 kHz. Only sources 0 and 1 carry useful data if the external interface rate is 16 kHz. See the Data Plane Detailed Design section in the Programming Guide for information on the interface between these two logical cores.  |
+| 11: Amplified microphone data before system delay   | 0,1,2,3: Specific microphones accessed by index.                                                                                                                                                                                                                                                                                                                              |
+| 12: Amplified far end (reference) with system delay | 0: Far end data received over I2S, post sample rate conversion to 16 kHz if required, and with a configurable fixed gain and system delay applied. This category provides the reference signal passed to the SHF logical cores for processing.                                                                                                                                |
+
+1. Set left channel to Amplified microphone 0 output
+```bash
+./xvf_host AUDIO_MGR_OP_L 3 0
+Device (USB)::device_init() -- Found device VID: 10374 PID: 26 interface: 3
+```
+
+2. Set right channel to far end (reference) data output
+```bash
+./xvf_host AUDIO_MGR_OP_R 5 0
+Device (USB)::device_init() -- Found device VID: 10374 PID: 26 interface: 3
+```
+
