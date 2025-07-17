@@ -218,3 +218,33 @@ Device (USB)::device_init() -- Found device VID: 10374 PID: 26 interface: 3
 Device (USB)::device_init() -- Found device VID: 10374 PID: 26 interface: 3
 ```
 
+### Tunning 
+
+The reSpeaker XVF3800 features a comprehensive set of adjustable algorithm parameters that enable precise optimization for different application scenarios. With configurable settings for echo cancellation, noise suppression, gain control, and audio processing, the device can be tailored to environments ranging from quiet home offices to busy conference rooms. These parameters allow fine-tuning of acoustic performance, ensuring optimal voice capture and audio quality across different use cases such as video conferencing, voice assistants, and industrial communication systems.
+
+By default, Seeed has already fine-tuned the following parameters:
+```
+AUDIO_MGR_REF_GAIN: 8.0 
+AUDIO_MGR_MIC_GAIN: 90 
+AUDIO_MGR_SYS_DELAY: 12 
+PP_FMIN_SPEINDEX: 1300.0
+PP_AGCMAXGAIN: 64.0
+PP_AGCGAIN: 2.0
+AEC_ASROUTGAIN: 1.0
+```
+
+However, you may need to make further adjustments when encountering the following situations:
+
+1. When using the 3.5mm interface to connect a speaker and experiencing poor AEC performance: This may be caused by excessive internal delay in the speaker. You need to adjust the AUDIO_MGR_SYS_DELAY parameter while ensuring the speaker volume is not too high to avoid distortion. Refer to [system-delay](https://www.xmos.com/documentation/XM-014888-PC/html/modules/fwk_xvf/doc/user_guide/04_tuning_the_application.html#system-delay)
+2. In conference scenarios requiring stronger echo suppression: Adjust parameters like PP_DTSENSITIVE. Refer to [echo-suppression](https://www.xmos.com/documentation/XM-014888-PC/html/modules/fwk_xvf/doc/user_guide/04_tuning_the_application.html#echo-suppression)
+3. When stronger noise suppression is needed: Refer to [noise-suppression](https://www.xmos.com/documentation/XM-014888-PC/html/modules/fwk_xvf/doc/user_guide/04_tuning_the_application.html#noise-suppression)
+4. When EQ parameters need adjustment to optimize audio output: Refer to [output-equalization](https://www.xmos.com/documentation/XM-014888-PC/html/modules/fwk_xvf/doc/user_guide/04_tuning_the_application.html#output-equalization)
+5. [More details about the tuning](https://www.xmos.com/documentation/XM-014888-PC/html/modules/fwk_xvf/doc/user_guide/04_tuning_the_application.html)
+
+Finally, after completing your tuninig, don't forget to use the `SAVE_CONFIGURATION` command to save your parameters to flash. These parameters stored in flash will take effect in both USB and I2S firmwares.
+
+### APPENDIX - XMOS XVF3800 Control Commands 
+
+[Here this the link](https://www.xmos.com/documentation/XM-014888-PC/html/modules/fwk_xvf/doc/user_guide/AA_control_command_appendix.html
+) that you can find all the control commands natively supported by the XMOS XVF3800. The reSpeaker XVF3800 supports all these control commands except for the GPIO commands (we have our `GPIO Control` commands!).
+
