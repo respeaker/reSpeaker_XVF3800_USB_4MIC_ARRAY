@@ -1,0 +1,84 @@
+DFU_CONTROLLER_SERVICER_RESID (0xF0):
+  dedicated_commands:
+    - cmd: DFU_DETACH
+      index: 0
+      type: CMD_WRITE_ONLY
+      value_type: TYPE_UINT8
+      number_of_values: 1
+      help: "DFU Detach command. No valid payload."
+      hidden: true
+    - cmd: DFU_DNLOAD
+      index: 1
+      type: CMD_WRITE_ONLY
+      value_type: TYPE_UINT8
+      number_of_values: 130
+      help: "DFU Download command. Two length bytes followed by 128 bytes of data."
+      hidden: true
+    - cmd: DFU_UPLOAD
+      index: 2
+      type: CMD_READ_ONLY
+      value_type: TYPE_UINT8
+      number_of_values: 130
+      help: "DFU Upload command. Two length bytes followed by 128 bytes of data."
+      hidden: true
+    - cmd: DFU_GETSTATUS
+      index: 3
+      type: CMD_READ_ONLY
+      value_type: TYPE_UINT8
+      number_of_values: 5
+      help: "DFU Get Status command. Status byte, 3 byte timeout, state byte."
+      hidden: true
+    - cmd: DFU_CLRSTATUS
+      index: 4
+      type: CMD_WRITE_ONLY
+      value_type: TYPE_UINT8
+      number_of_values: 1
+      help: "DFU Clear Status command. No valid payload."
+      hidden: true
+    - cmd: DFU_GETSTATE
+      index: 5
+      type: CMD_READ_ONLY
+      value_type: TYPE_UINT8
+      number_of_values: 1
+      help: "DFU Get State. Returns 1 byte state number."
+      hidden: true
+    - cmd: DFU_ABORT
+      index: 6
+      type: CMD_WRITE_ONLY
+      value_type: TYPE_UINT8
+      number_of_values: 1
+      help: "DFU Abort command. No valid payload."
+      hidden: true
+    - cmd: DFU_SETALTERNATE
+      index: 64
+      type: CMD_WRITE_ONLY
+      value_type: TYPE_UINT8
+      number_of_values: 1
+      help: "DFU additional command. Sets factory (0) or upgrade (1) DFU target"
+      value_ranges:
+        value0: [0 .. 1]
+      hidden: true
+    - cmd: DFU_TRANSFERBLOCK
+      index: 65
+      type: CMD_READ_WRITE
+      value_type: TYPE_UINT8
+      number_of_values: 2
+      help: "DFU additional command. Sets the transfer block for upload. Internally autoincrements."
+      default_value: 0
+      hidden: true
+    - cmd: DFU_GETVERSION
+      index: 88
+      type: CMD_READ_ONLY
+      value_type: TYPE_UINT8
+      number_of_values: 3
+      help: "DFU Servicer-specific version command. Returns device version."
+      hidden: true
+    - cmd: DFU_REBOOT
+      index: 89
+      type: CMD_WRITE_ONLY
+      value_type: TYPE_UINT8
+      number_of_values: 1
+      help: "DFU Servicer-specific reboot command. No valid payload."
+      hidden: true
+  shared_commands:
+  external_commands:
