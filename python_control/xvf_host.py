@@ -106,6 +106,7 @@ PARAMETERS = {
     "LED_COLOR": (20, 16, 1, "rw", "uint32"),
     "LED_DOA_COLOR": (20, 17, 2, "rw", "uint32"),
     "DOA_VALUE": (20, 18, 2, "ro", "uint16"),
+    "LED_RING_COLOR": (20, 19, 12, "rw", "uint32"),
 
     # PP_RESID commands
     "PP_CURRENT_IDLE_TIME": (17, 70, 1, "ro", "uint32"),
@@ -274,6 +275,23 @@ def find(vid=0x2886, pid=0x001A):
 
 
 
+def parse_value(value_str):
+    """Parse a value string that can be decimal, hex (0x prefix), or hex ($ prefix)"""
+    try:
+        # Try hex formats first (0x prefix or $ prefix)
+        if value_str.startswith(('0x', '0X')):
+            return int(value_str, 16)
+        elif value_str.startswith('$'):
+            return int(value_str[1:], 16)
+        else:
+            # Try as decimal float first, then decimal int
+            try:
+                return float(value_str)
+            except ValueError:
+                return int(value_str)
+    except ValueError:
+        raise ValueError(f"Cannot parse '{value_str}' as a number (supports decimal and hex formats like 0xFF or $FF)")
+
 def main():
     parser = argparse.ArgumentParser(description='ReSpeaker Host Control Script')
     parser.add_argument('command', choices=PARAMETERS.keys(), 
@@ -282,8 +300,8 @@ def main():
                        help='Vendor ID (default: 0x2886)')
     parser.add_argument('--pid', type=lambda x: int(x, 0), default=0x001A,
                        help='Product ID (default: 0x001A)')
-    parser.add_argument('--values', nargs='+', type=float,
-                       help='Values for write commands (only for write operations)')
+    parser.add_argument('--values', nargs='+', type=parse_value,
+                       help='Values for write commands (only for write operations). Supports decimal (123, 1.5) and hex (0x7B, $7B) formats')
     
     args = parser.parse_args()
     
@@ -298,7 +316,11 @@ def main():
                 print(f"Error: {args.command} is read-only and cannot be written to")
                 sys.exit(1)
             
-            if PARAMETERS[args.command][4] != "float" and PARAMETERS[args.command][4] != "radians":
+            # Convert values to appropriate types based on parameter type
+            param_type = PARAMETERS[args.command][4]
+            if param_type == "float" or param_type == "radians":
+                args.values = [float(v) for v in args.values]
+            else:
                 args.values = [int(v) for v in args.values]
             
             if PARAMETERS[args.command][2] != len(args.values):
