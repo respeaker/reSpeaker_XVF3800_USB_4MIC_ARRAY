@@ -4,7 +4,7 @@ The reSpeaker XVF3800 is equipped with a control interface that allows users to 
 
 ## Introducing xvf_host
 
-The sample host application `xvf_host` can be found in the `host_control/<platform>/` subdirectory of this repository. Supported platforms include linux_x86_64, mac_x86_64, mac_arm64, rpi_32bit, rpi_64bit, and win32. The entire directory needs to be transferred to the host computer and can be placed anywhere convenient. This directory should contain the following files:
+The sample host application `xvf_host` can be found in the `host_control/<platform>/` subdirectory of this repository. Supported platforms include jetson, linux_x86_64, mac_arm64, rpi_64bit, and win32. (**Now, we offer a Python-based host application that supports all platforms: [xvf_host.py](../python_control/xvf_host.py). Feel free to try it out.**) The entire directory needs to be transferred to the host computer and can be placed anywhere convenient. This directory should contain the following files:
 
 ```
 .
@@ -14,7 +14,7 @@ The sample host application `xvf_host` can be found in the `host_control/<platfo
 ├── dfu_cmds.yaml                   # RPi only
 ├── transport_config.yaml           # RPi only
 ├── (lib)device_usb.(so/dll/dylib)  # All platforms
-├── libusb-1.0.0.dylib              # mac_x86_64 and mac_arm64 only
+├── libusb-1.0.0.dylib              # mac_arm64 only
 ├── xvf_i2c_dfu                     # RPi only
 └── xvf_host(.exe)                  # All platforms
 ```
