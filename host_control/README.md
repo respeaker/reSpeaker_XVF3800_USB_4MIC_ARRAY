@@ -243,6 +243,8 @@ However, you may need to make further adjustments when encountering the followin
 
 Finally, after completing your tuninig, don't forget to use the `SAVE_CONFIGURATION` command to save your parameters to flash. These parameters stored in flash will take effect in both USB and I2S firmwares.
 
+**Note:** The `AEC_FIXEDBEAMSONOFF` parameter does not currently support being set to 1. Attempting to set this value may cause unexpected behavior.
+
 ### APPENDIX - XMOS XVF3800 Control Commands 
 
 [Here this the link](https://www.xmos.com/documentation/XM-014888-PC/html/modules/fwk_xvf/doc/user_guide/AA_control_command_appendix.html

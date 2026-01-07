@@ -89,3 +89,7 @@ python xvf_host.py AEC_MIC_ARRAY_GEO
   BLD_MSG: ['u', 'a', '-', 'i', 'o', '1', '6', '-', 's', 'q', 'r']
   ```
 
+## Parameter Limitations
+
+**Note:** The `AEC_FIXEDBEAMSONOFF` parameter does not currently support being set to 1. Setting this value may cause unexpected behavior.
+

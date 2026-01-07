@@ -57,7 +57,7 @@ PARAMETERS = {
     "AEC_RT60": (33, 9, 1, "ro", "float", "Current RT60 estimate. Valid range: [0.250 .. 0.900] (seconds) A negative value indicates that the RT60 estimation is invalid."),
     "AEC_ASROUTONOFF": (33, 35, 1, "rw", "int32", "Enables the automatic speech recognition (ASR) output: if set to 0, the AEC residuals are output, one channel per microphone, if set to 1, the ASR processed output is used, where each channel is associated with a beam from the beamformer. Valid range: 0,1 (off, on)"),
     "AEC_ASROUTGAIN": (33, 36, 1, "rw", "float", "Fixed gain applied to qsr output, i.e., only applied if ASROUTONOFF==1.. Valid range: [0.0 .. 1000.0] (linear gain factor)"),
-    "AEC_FIXEDBEAMSONOFF": (33, 37, 1, "rw", "int32", "Enables or disables fixed focused beam mode. Valid range: 0,1 (off, on)"),
+    "AEC_FIXEDBEAMSONOFF": (33, 37, 1, "rw", "int32", "Enables or disables fixed focused beam mode. Valid range: 0,1 (off, on). **Note: Setting to 1 is not currently supported.**"),
     "AEC_FIXEDBEAMNOISETHR": (33, 38, 2, "rw", "float", "Threshold value for updating the noise canceller when fixed beam mode is enabled. A higher value indicates that the noise canceller may update when the free running beam is close to the fixed beam. A lower value indicates that the noise canceller may update when the free running beam is further away from the focused beam.[BECLEAR_NUMBER_OF_BEAMS],  Valid range: [0.0 .. 1.0]"),
     
     # AUDIO_MGR_RESID commands
