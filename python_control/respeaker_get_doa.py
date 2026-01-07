@@ -3,6 +3,7 @@ import sys
 import struct
 import usb.core
 import usb.util
+import libusb_package
 import time
 
 # name, resid, cmdid, length, type
@@ -90,10 +91,13 @@ class ReSpeaker:
 
 
 def find(vid=0x2886, pid=0x001A):
-    dev = usb.core.find(idVendor=vid, idProduct=pid)
+    if sys.platform.startswith('win'):
+        dev = libusb_package.find(idVendor=vid, idProduct=pid)
+    else:
+        dev = usb.core.find(idVendor=vid, idProduct=pid)
     if not dev:
         return
-    
+
     return ReSpeaker(dev)
 
 def main():
