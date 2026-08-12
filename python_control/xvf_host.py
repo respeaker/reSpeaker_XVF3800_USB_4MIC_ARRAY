@@ -24,7 +24,9 @@ PARAMETERS = {
     "USB_BIT_DEPTH": (48, 8, 2, "rw", "uint8", "Only relevant for the UA device variant. For the UA device, set or get the USB bit depth IN, OUT to either 16, 24 or 32. Setting will reboot the chip, resetting all other parameters to default. If issued to the INT device, a set is ignored and the device is not rebooted while a get always returns 0 as both IN and OUT bit depths."),
     "SAVE_CONFIGURATION": (48, 9, 1, "wo", "uint8", "Set to any value to save the current configuration to flash."),
     "CLEAR_CONFIGURATION": (48, 10, 1, "wo", "uint8", "Set to any value to clear the current configuration and revert to the default configuration."),
-    
+    "AIC3104_HP_LEVEL": (48, 11, 1, "rw", "uint8", "Set or get the AIC3104 headphone level. Valid range: [0 .. 9]"),
+    "AIC3104_LINEOUT_LEVEL": (48, 12, 1, "rw", "uint8", "Set or get the AIC3104 lineout level. Valid range: [0 .. 9]"),
+
     # AEC_RESID commands
     "SHF_BYPASS": (33, 70, 1, "rw", "uint8", "AEC bypass"),
     "AEC_NUM_MICS": (33, 71, 1, "ro", "int32", "Number of microphone inputs into the AEC"),
