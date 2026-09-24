@@ -61,7 +61,7 @@ PARAMETERS = {
     "AEC_ASROUTGAIN": (33, 36, 1, "rw", "float", "Fixed gain applied to qsr output, i.e., only applied if ASROUTONOFF==1.. Valid range: [0.0 .. 1000.0] (linear gain factor)"),
     "AEC_FIXEDBEAMSONOFF": (33, 37, 1, "rw", "int32", "Enables or disables fixed focused beam mode. Valid range: 0,1 (off, on)"),
     "AEC_FIXEDBEAMNOISETHR": (33, 38, 2, "rw", "float", "Threshold value for updating the noise canceller when fixed beam mode is enabled. A higher value indicates that the noise canceller may update when the free running beam is close to the fixed beam. A lower value indicates that the noise canceller may update when the free running beam is further away from the focused beam.[BECLEAR_NUMBER_OF_BEAMS],  Valid range: [0.0 .. 1.0]"),
-    
+
     # AUDIO_MGR_RESID commands
     "AUDIO_MGR_MIC_GAIN": (35, 0, 1, "rw", "float", "Audio Mgr pre SHF microphone gain"),
     "AUDIO_MGR_REF_GAIN": (35, 1, 1, "rw", "float", "Audio Mgr pre SHF reference gain"),
@@ -107,6 +107,17 @@ PARAMETERS = {
     "LED_DOA_COLOR": (20, 17, 2, "rw", "uint32", "Set the LED color of doa mode, the first value is the base color and the second value is the doa color"),
     "DOA_VALUE": (20, 18, 2, "ro", "uint16", "Get the doa value and if speech is detected, payload[0] = doa value, from 0 to 359, payload[1] = 1 if speech is detected, 0 if not"),
     "LED_RING_COLOR": (20, 19, 12, "rw", "uint32", "Set the LED color of ring mode, each value is the color of one LED"),
+
+    # IO_CONFIG_SERVICER_RESID commands
+    "GPI_READ_VALUES": (36, 0, 3, "ro", "uint8", "Get current logic level of all GPI pins, in order of Pin X1D09 (onboard Mute button), X1D13 and X1D34."),
+    "GPI_INDEX": (36, 1, 1, "rw", "uint8", "Set/get pin index for the subsequent GPI_EVENT_CONFIG, GPI_ACTIVE_LEVEL, GPI_VALUE and GPI_EVENT_PENDING commands. 0 = onboard Mute button."),
+    "GPI_EVENT_CONFIG": (36, 2, 1, "rw", "uint8", "Set/get event config for the selected pin: 0 = None (built-in button behaviour disabled, e.g. the Mute button no longer mutes and no HID report is sent; the pin is free for custom use), 1 = Falling (default, Mute button mutes), 2 = Rising, 3 = Both. Persist with SAVE_CONFIGURATION, revert with CLEAR_CONFIGURATION."),
+    "GPI_ACTIVE_LEVEL": (36, 3, 1, "rw", "uint8", "Set/get active level for the selected pin"),
+    "GPI_VALUE": (36, 4, 1, "ro", "uint8", "Get current logic level of the selected GPI pin (select with GPI_INDEX first). Referenced to the active level: 1 = active."),
+    "GPI_EVENT_PENDING": (36, 5, 1, "ro", "uint8","Read and clear the pending event for the selected GPI pin."),
+    "GPI_VALUE_ALL": (36, 6, 1, "ro", "uint32", "Get current active-state bitmap for all GPI pins. Bit n corresponds to GPI pin n."),
+    "GPI_EVENT_PENDING_ALL": (36, 7, 1, "ro", "uint32", "Get and clear the pending-event bitmap for all GPI pins. Bit n corresponds to GPI pin n."),
+    "MUTE_FUNCTION_ENABLE": (36, 8, 1, "rw", "uint8", "Enable or disable the built-in Mute action: 0 = disabled, 1 = enabled. GPI edge detection remains active."),
 
     # PP_RESID commands
     "PP_CURRENT_IDLE_TIME": (17, 70, 1, "ro", "uint32", "PP processing current idle time in 10ns ticks"),

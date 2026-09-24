@@ -1,7 +1,20 @@
 
 # reSpeaker XVF3800 USB Firmware Changelog
 
-## v2.1.0 (Current)
+## v2.1.1 (Current)
+
+### Added
+
+- Added configurable Mute-button behavior. The new `MUTE_FUNCTION_ENABLE` command enables or disables the built-in mute action independently of GPI edge detection, allowing a falling-edge button event to be used for a custom function without changing the input edge configuration.
+- Added USB control commands for reading and configuring GPI inputs: `GPI_READ_VALUES`, `GPI_INDEX`, `GPI_EVENT_CONFIG`, `GPI_ACTIVE_LEVEL`, `GPI_VALUE`, `GPI_EVENT_PENDING`, `GPI_VALUE_ALL`, and `GPI_EVENT_PENDING_ALL`.
+- Added flash persistence for the GPI and Mute-button configuration. Settings are included in `SAVE_CONFIGURATION` and restored during startup.
+- Added the GPI controls to the Python host script so a USB-connected host can read the onboard Mute-button input and implement custom button logic without an external microcontroller.
+
+### Changed
+
+- Separated the default Mute action from GPI event detection. A falling-edge event can now be retained for custom handling while the built-in mute action is disabled.
+
+## v2.1.0
 
 ### Added
 

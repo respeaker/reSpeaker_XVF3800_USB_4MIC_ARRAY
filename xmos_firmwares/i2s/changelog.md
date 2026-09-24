@@ -1,6 +1,19 @@
 # reSpeaker XVF3800 I2S Firmware Changelog
 
-## v1.0.8 (Current)
+## v1.0.9 (Current)
+
+### Added
+
+- Added the `MUTE_FUNCTION_ENABLE` read/write control command (command ID `8` of the IO config servicer; existing command IDs are unchanged):
+  - `1` (default): the onboard Mute button performs the built-in mute action, same as before.
+  - `0`: disables the built-in mute action, turning the button into a pure event source so the host can own the mute semantics. Edge detection and event reporting stay active.
+  - The setting is not persisted to flash: it resets to `1` on every boot, so the host must re-send the command after startup if the built-in action should stay disabled.
+
+### Fixed
+
+- Fixed `GPI_EVENT_PENDING_ALL` always returning `0`. The event bitmap was accumulated with `&=` instead of `|=`, so the host never saw any pending events through this command.
+
+## v1.0.8
 
 ### Changed
 
