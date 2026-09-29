@@ -91,6 +91,10 @@ PARAMETERS = {
     "AUDIO_MGR_FAR_END_DSP_ENABLE": (35, 25, 1, "rw", "uint8", "Enables/disables XVF3800 far-end DSP (if implemented). Write a 1 to enable, 0 to disable"),
     "AUDIO_MGR_SYS_DELAY": (35, 26, 1, "rw", "int32", "Delay, measured in samples, that is applied to the reference signal before passing to SHF algorithm"),
     "I2S_DAC_DSP_ENABLE": (35, 27, 1, "rw", "uint8", "Indicates if the DAC performs DSP on the far-end reference signal. If enabled (1), use the I2S signal as input to the audio pipeline, even in the UA configuration"),
+    "AUDIO_MGR_OP_CH3": (35, 28, 2, "rw", "uint8", "<category>, <source>; Sets category and source for USB direct output channel 3"),
+    "AUDIO_MGR_OP_CH4": (35, 29, 2, "rw", "uint8", "<category>, <source>; Sets category and source for USB direct output channel 4"),
+    "AUDIO_MGR_OP_CH5": (35, 30, 2, "rw", "uint8", "<category>, <source>; Sets category and source for USB direct output channel 5"),
+    "AUDIO_MGR_OP_CH6": (35, 31, 2, "rw", "uint8", "<category>, <source>; Sets category and source for USB direct output channel 6"),
 
 
     # GPO_SERVICER_RESID commands 
