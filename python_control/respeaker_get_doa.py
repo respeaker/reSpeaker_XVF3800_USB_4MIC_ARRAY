@@ -79,7 +79,7 @@ class ReSpeaker:
                 match_str += 'f'
             result = struct.unpack(match_str, byte_data[1:length])
         elif data[4] == 'uint16':
-            result = response.tolist()
+            result = struct.unpack('<HH', response.tobytes()[1:5])
 
         return result
 
@@ -109,7 +109,7 @@ def main():
     print('{}: {}'.format("VERSION", dev.read("VERSION")))
     while True:
         result = dev.read("DOA_VALUE")
-        print('{}: {}, {}: {}'.format("SPEECH_DETECTED", result[3], "DOA_VALUE", result[1]))
+        print('{}: {}, {}: {}'.format("SPEECH_DETECTED", result[1], "DOA_VALUE", result[0]))
         time.sleep(1)
 
     dev.close()
