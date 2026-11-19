@@ -172,3 +172,17 @@ This saves the current configuration, including other supported persistent setti
   VERSION: [2, 0, 7]
   BLD_MSG: ['u', 'a', '-', 'i', 'o', '1', '6', '-', 's', 'q', 'r']
   ```
+
+## Example: Mute button as LED mode switch
+
+`mute_button_led_modes.py` uses the GPI commands added in USB firmware v2.1.1 to turn the onboard Mute button into an LED mode switch:
+
+- **Short press:** cycle LED modes (DOA → rainbow → 13 solid colors → off). The selected mode is saved to flash.
+- **Long press (~0.8 s):** toggle mute. Muted: 3 red blinks, then LEDs off. Unmuted: short multi-color blink, then back to the selected mode.
+
+```bash
+pip install pyusb
+python mute_button_led_modes.py
+```
+
+The built-in mute action is only disabled while the script runs. Without it, the button mutes as usual. Edit `COLORS` / `MODES` at the top of the script to change the cycle.
